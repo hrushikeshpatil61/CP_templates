@@ -1,0 +1,44 @@
+vector<int>Rank; vector<int>Parent; int n;
+void MakeDset(){
+    Parent.resize(n+1);
+    Rank.resize(n+1,0);
+    for(int i=1;i<=n;i++){
+        Parent[i]=i;
+    }
+}
+int FindPar(int node){
+    if(node == Parent[node]){
+        return node;
+    }
+    return Parent[node] = FindPar(Parent[node]);
+}
+void Union(int u,int v){
+    u=FindPar(u);
+    v=FindPar(v);
+    if(Rank[u]<Rank[v]){
+        Parent[u] = v;
+    }else if(Rank[v]<Rank[u]){
+        Parent[v]=u;
+    }
+    else{
+        Parent[v]=u;
+        Rank[u]++;
+    }
+}
+
+void solve(){
+    cin>>n;
+    int m;
+    cin>>m;
+    MakeDset();
+    while(m--){
+        int l,r;
+        cin>>l>>r;
+        Union(l,r);
+    }
+    set<int>st;
+    for(int i=1;i<=n;i++){
+        st.insert(FindPar(i));
+    }
+    cout<<st.size();
+}
