@@ -1,0 +1,61 @@
+vector<int>Rank;
+vector<int>Parent;
+struct node{
+    int u,v,wt;
+    node(int fir,int sec,int weight){
+        u=fir,v=sec,wt=weight;
+    }
+};
+bool nodecomp(node a,node b){
+    return a.wt<b.wt;
+}
+int n,m;
+void MakeDset(){
+    Parent.resize(n+1);
+    Rank.resize(n+1,0);
+    for(int i=0;i<=n;i++){
+        Parent[i]=i;
+    }
+}
+int FindPar(int node){
+    if(node == Parent[node]){
+        return node;
+    }
+    return Parent[node] = FindPar(Parent[node]);
+}
+void Union(int u,int v){
+    u=FindPar(u);
+    v=FindPar(v);
+    if(Rank[u]<Rank[v]){
+        Parent[u] = v;
+    }else if(Rank[v]<Rank[u]){
+        Parent[v]=u;
+    }
+    else{
+        Parent[v]=u;
+        Rank[u]++;
+    }
+}
+
+void solve(){
+    cin>>n>>m;
+    MakeDset();//making disjoint set github
+    vector<node> edges;
+    for(int i=0;i<m;i++){
+        int u,v,wt;
+        cin>>u>>v>>wt;
+        edges.push_back(node(u,v,wt));
+    }
+    sort(all(edges),nodecomp);
+    int cost=0;
+    vector<pair<int,int>>mst;
+    for(auto it:edges){
+        if(FindPar(it.v)!=FindPar(it.u)){
+            cost +=it.wt;
+            debug(cost)
+            mst.push_back({it.u,it.v});
+            Union(it.u,it.v);
+        }
+    }
+    cout<<cost;
+}
