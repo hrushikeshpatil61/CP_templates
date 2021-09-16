@@ -1,0 +1,52 @@
+//prims algorithm using heap (implemented using priority queue) O(NLog N)
+void solve(){
+   int N,m;
+    cin >> N >> m;
+    vector<pair<int,int> > adj[N]; 
+    int a,b,wt;
+    //matrix is used for, if we want to calculate the sum of edges in MST;
+    int matrix[N+1][N+1];
+    for(int i = 0; i<m ; i++){
+        cin >> a >> b >> wt;
+        adj[a].push_back(make_pair(b,wt));
+        adj[b].push_back(make_pair(a,wt));
+        matrix[a][b]=wt;
+        matrix[b][a]=wt;
+    }   
+    int parent[N]; 
+    int key[N]; 
+    bool ismstNode[N]; 
+    // edges are starting from 0
+    for (int i = 1; i < N; i++) 
+        key[i] = INT_MAX, ismstNode[i] = false; 
+   
+    priority_queue< pair<int,int>, vector <pair<int,int>> , greater<pair<int,int>> > pq;
+    int ans=0;
+    key[0] = 0; 
+    parent[0] = -1; 
+    pq.push({0, 0});
+    
+    while(!pq.empty())
+    { 
+        int u = pq.top().second; 
+        pq.pop(); 
+        ismstNode[u] = true; 
+        for (auto it : adj[u]) {
+            int v = it.first;
+            int weight = it.second;
+            if (ismstNode[v] == false && weight < key[v]) {
+                parent[v] = u;
+        key[v] = weight; 
+                pq.push({key[v], v});    
+            }
+        }
+            
+    }
+    //printing edges in mst;
+    for(int i=1;i<N;i++){
+        cout<<parent[i]<<" - "<<i<<nline;
+        ans+=matrix[i][parent[i]];
+    } 
+    cout<<ans;
+    
+}
