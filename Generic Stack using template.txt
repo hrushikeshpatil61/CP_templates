@@ -1,0 +1,54 @@
+//#include<bits/stdc++.h>
+
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+template <typename T>
+class Stack {
+private:
+    vector<T> elements;
+
+public:
+    void push(T value) {
+        elements.push_back(value);
+    }
+
+    void pop() {
+        if (!elements.empty()) {
+            elements.pop_back();
+        } else {
+            std::cout << "Stack is empty. Cannot pop." << std::endl;
+        }
+    }
+
+    const T top() {
+        if (!elements.empty()) {
+            return elements.back();
+        } else {
+            std::cerr << "Stack is empty. Cannot get top element." << std::endl;
+            // You might want to handle this case differently based on your needs.
+            // Here, I'm returning a default-constructed value of type T.
+            return T();
+        }
+    }
+
+    const bool empty() {
+        return elements.empty();
+    }
+
+    const size_t size() {
+        return elements.size();
+    }
+};
+
+int main() {
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+    #endif
+    Stack<int> stk;
+    cout<<stk.top();
+
+}
